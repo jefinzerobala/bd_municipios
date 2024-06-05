@@ -1,0 +1,17 @@
+
+fazer primeiro esse para depois o OneToMany: 
+
+@ManyToOne - muitos para um = exemplo : 3 cidades de um estado, o estado é o pai e as cidades os filhos, daí MUITAS cidades para UM estado
+
+@JoinColumn(name="") - nome da chave estrangeira/fk
+
+private *nome da tabela pai* *apelido qualquer* - para não ter confusão, colocar tipo : private Estado estado
+
+
+//////////////////////////////////////////////////////////
+
+@OneToMany(mappedBy = "seu apelido qualquer") - um para muitos, esse segue o mesmo exemplo de cima, porém utilizado para o PAI, porque é UM estado para MUITOS filhos
+
+private List<*nome da tabela filho*> *apelido qualquer* (é bom colocar sempre o mesmo nome da tabela com um list, ex : jefersonList) = new ArrayList<>()
+
+~~ private List<*> * = new ArrayList<>();

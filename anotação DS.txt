@@ -1,0 +1,97 @@
+Spring initializr - site que ajuda a criar um projeto java
+
+No Site
+
+- Selecionar Maven (repositório mais completo)
+- Spring Boot = versão 3.1.11 (versão com menos bugs)
+
+- Project Metadata = Group = colocar nome como se fosse site só que ao contrário (ex : br.com.jeferson)
+		   = Artifact = nome escolhido (ex : estoque)
+		   = Description = descrição do seu projeto (ex: Projeto desenvolvido em aula com a turma A)
+		   = Java = 21 (versão do java)
+
+
+- Dependencies (bibliotecas que iremos usar) - Adicionar Spring Web (CTRL + B ou clicar no ADD...)
+
+- Gerar o "estoque" - Clicar em GENERATE ou CTRL + ENTER - Extrarir o arquivo (nunca em pendrive, pq pode corromper)
+
+- Abrir o IntelliJ - Clicar em open e encontrar a pasta do seu arquivo, após isso executar (se aparecer um aviso, clique em "Trust Project") e espere terminar de baixar todos os arquivos
+
+- pom.xml - vai estar todos os dados que colocamos no site antes de gerar tudo isso (verificar se está tudo correto)
+
+- clicar em menu (hamburguinho) - Project Structure (CTRL + ALT + SHIFT + S) - SDK - selecionar a versão java que colocou no site, nesse caso foi 21 (estava 17)
+
+- src - main - java - abrir nosso projeto (executar antes de usar, clicando com botão direito no projeto e depois Run... ou CTRL + SHIFT + F10 - Se aparecer no canto inferior direito (ultimo ngc) "Started Nome do projeto..." aí você pode começar a usar)
+
+
+- voltando ao site - adicionar mais duas dependencies = MySQL Driver e Spring Data JPA (Não adicionar no começo, pois na hora de executar irá demorar mais e precisaria de uma outra configuração, já que estamos adicionando coisas do banco de dados. Então se caso desse um erro no começo, você economizaria tempo para refazer) 
+
+- após isso, clicar em EXPLORE (CTRL + SPACE) e copiar APENAS os códigos que foram adicionados das novas dependencies - depois colar dentro do IntelliJ em pom.xml - irá dar erro, daí é só clicar no canto superior direito no símbolo "M" azul que irá aparecer, espere atualizar o código e salve (CTRL + S)
+
+
+-------------------------------------------------------------------------------------------
+
+- criar uma nova aba MODEL ----- main > java > br.com.jeferson.estoque (botão direito nisso) - new package - colocar o nome com o caminho igual o anterior. Ex : br.com.jeferson.model
+
+- criar nova classe no model - botão direito nele e new Java Class (nome da tabela do bd)
+
+- dentro da classe (no código) - colocar @Entity (vai declarar que a classe categoria é uma entidade) - dps colocar em baixo desse: @Table (name = "categoria") (vai declarar uma tabela de nome "categoria")
+
+- usar "private" para segurança das classes
+
+- usar: jakarta.persistence -> é como se fosse um "Scanner" da vida
+
+- Getter and Setter -> get = para ler //// set = para setar e/ou atribuir valores(para usar, basta clicar com o botão direito no código ou ALT + Insert, selecione Getter and Setter e dps selecione os campos (shift ou cntrl + mouse) após marcar todos os campos.
+
+- ALT + Insert  -> equals() and... -> next -> selecione apenas os campos de primary key (nesse caso é só o @Id). Esse código irá definir que a primary key não pode se repetir/ser igual, etc...
+
+- Para cada tabela, criar uma classe nova
+
+- Long -> como se fosse o BigInt do sql
+
+- BigDecimal -> deixar as contas mais exatas, é um código mais "perfeitinho" para decimais
+
+
+* Criar FK (lembrar de usar Getter and Setter nisso):
+
+- Não criar a tabela que for a chave estrangeira de inicio, criar somente na hora que for fazer as fk de fato
+	
+- @JoinColumn (name="")
+- @ManyToOne
+(exemblo: private "nome da tabela" "nome") no meu caso ficou "private categoria categoria)
+
+
+- @OneToMany(mappedBy = "categoria") - um para muitos, mappedby vai meio que mapear/encontrar o campo
+- private List<"nome"> "nome" = new ArrayList<>() - exemplo : 
+private List<produto> produtoLista = new ArrayList<>();
+
+*(alt + enter em cima de List para importar)*
+
+
+exemplo código : 
+		 @Id -> SELECIONAR "jakarta.persistence" (esse @id é para indicar que aquele campo é uma primary key)
+		 @GeneratedValue(strategy = GenerationType.IDENTITY) -> está indicando que aquele campo é auto increment (a primary key no caso)
+		 private int id;
+		 private String nomecategoria;
+
+
+
+Configuração para o Banco de Dados :
+ 
+--> startar o xamp MySQL e Apache (esse não é importante, mas starta tmb) 
+
+- No IntelliJ -> resources -> application.properties -> código abaixo: 
+
+#Configuração do Banco de Dados mysql (para acessar ele)
+
+spring.jpa.database=MYSQL
+spring.datasource.url=jdbc:mysql://localhost:3306/estoque?createDatabaseIfNotExist=true&useSSL=false&ServerTimezone=America/Sao_Paulo (resumindo : indicando a chave de acesso padrão do mysql (3306) dps fala que se caso não tenha esse banco, vai criar, por fim indica como quer que seja o fuso horário lá (nesse caso America/São Paulo, que é o de brasilia)
+spring.datasource.username=root
+spring.datasource.password= (caso tenha senha para o banco, se n tiver deixar em branco)
+
+
+#Configuração do Hibernate (framework que acessa dados, trabalha toda essa parte ai)
+spring.jpa.show-sql=true
+spring.jpa.hibernate.ddl-auto=update
+
+
